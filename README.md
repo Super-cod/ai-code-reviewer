@@ -55,3 +55,25 @@ This project follows GitHub Flow.
 - Docker Desktop
 - Draw.io
 - Figma
+
+
+
+## MoSCoW Prioritization
+
+### Must Have
+- GitHub login
+- Fetch PRs
+- AI code review
+- Display review results
+
+### Should Have
+- Auto post comments to GitHub
+- Review confidence score
+
+### Could Have
+- Downloadable reports
+- Review history
+
+### Won’t Have
+- Mobile app
+- Offline support
