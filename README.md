@@ -77,3 +77,11 @@ This project follows GitHub Flow.
 ### Won’t Have
 - Mobile app
 - Offline support
+
+
+## Quick Start – Local Development
+1. Install Docker Desktop
+2. Run:
+   docker build -t ai-code-reviewer .
+   docker run -p 8000:8000 ai-code-reviewer
+3. Open http://localhost:8000
