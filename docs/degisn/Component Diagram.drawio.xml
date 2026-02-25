@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.5.3">
+  <diagram name="Page-1" id="Ib3uU0XuvDREhQ_r8crN">
+    <mxGraphModel dx="1042" dy="527" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-1" parent="1" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" value="Backend_System" vertex="1">
+          <mxGeometry height="332" width="1015" x="10" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-2" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="Auth Controller" vertex="1">
+          <mxGeometry height="54" width="171" x="569" y="43" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-3" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="GitHubService" vertex="1">
+          <mxGeometry height="54" width="162" x="824" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-4" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="PR Controller" vertex="1">
+          <mxGeometry height="54" width="155" x="577" y="147" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-5" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="Review Controller" vertex="1">
+          <mxGeometry height="54" width="188" x="46" y="199" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-6" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="AIReviewService" vertex="1">
+          <mxGeometry height="54" width="176" x="308" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-7" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="ReviewService" vertex="1">
+          <mxGeometry height="54" width="162" x="315" y="251" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-8" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="Review Repository" vertex="1">
+          <mxGeometry height="54" width="190" x="559" y="251" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-9" parent="Rsky1uu9qmNEgGS5fM4n-1" style="whiteSpace=wrap;strokeWidth=2;" value="Database" vertex="1">
+          <mxGeometry height="54" width="126" x="842" y="251" as="geometry" />
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-10" edge="1" parent="Rsky1uu9qmNEgGS5fM4n-1" source="Rsky1uu9qmNEgGS5fM4n-2" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0.12;entryY=0;rounded=0;" target="Rsky1uu9qmNEgGS5fM4n-3" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="787" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-11" edge="1" parent="Rsky1uu9qmNEgGS5fM4n-1" source="Rsky1uu9qmNEgGS5fM4n-4" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0.12;entryY=1;rounded=0;" target="Rsky1uu9qmNEgGS5fM4n-3" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="787" y="174" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-12" edge="1" parent="Rsky1uu9qmNEgGS5fM4n-1" source="Rsky1uu9qmNEgGS5fM4n-5" style="curved=1;startArrow=none;endArrow=block;exitX=0.68;exitY=0;entryX=0;entryY=0.5;rounded=0;" target="Rsky1uu9qmNEgGS5fM4n-6" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="271" y="122" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-13" edge="1" parent="Rsky1uu9qmNEgGS5fM4n-1" source="Rsky1uu9qmNEgGS5fM4n-5" style="curved=1;startArrow=none;endArrow=block;exitX=0.86;exitY=1;entryX=0;entryY=0.5;rounded=0;" target="Rsky1uu9qmNEgGS5fM4n-7" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="271" y="278" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-14" edge="1" parent="Rsky1uu9qmNEgGS5fM4n-1" source="Rsky1uu9qmNEgGS5fM4n-7" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=0;" target="Rsky1uu9qmNEgGS5fM4n-8" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rsky1uu9qmNEgGS5fM4n-15" edge="1" parent="Rsky1uu9qmNEgGS5fM4n-1" source="Rsky1uu9qmNEgGS5fM4n-8" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=0;" target="Rsky1uu9qmNEgGS5fM4n-9" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

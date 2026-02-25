@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.5.3">
+  <diagram name="Page-1" id="eFBns9_bBPpHy3NIvLcc">
+    <mxGraphModel dx="2605" dy="1318" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-1" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Frontend&#xa;Presentation Layer&#xa;- Login UI&#xa;- Repo List&#xa;- PR List&#xa;- Review Screen&#xa;- History Screen" vertex="1">
+          <mxGeometry height="198" width="194" x="311" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-2" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Backend&#xa;Application Layer&#xa;- Auth Controller&#xa;- PR Controller&#xa;- Review Controller&#xa;- API Routes" vertex="1">
+          <mxGeometry height="174" width="198" x="309" y="372" as="geometry" />
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-3" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Service Layer&#xa;- GitHubService&#xa;- AIReviewService&#xa;- ReviewService" vertex="1">
+          <mxGeometry height="126" width="186" x="316" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-4" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="Data Layer&#xa;- Review Repository&#xa;- Database" vertex="1">
+          <mxGeometry height="102" width="201" x="70" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-5" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="GitHub API&#xa;External System" vertex="1">
+          <mxGeometry height="78" width="175" x="321" y="832" as="geometry" />
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-6" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="LLM API&#xa;External System" vertex="1">
+          <mxGeometry height="78" width="175" x="546" y="832" as="geometry" />
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-7" edge="1" parent="1" source="1wH2KnDZV6dMyFnDG8o9-1" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1wH2KnDZV6dMyFnDG8o9-2" value="REST API Calls">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-8" edge="1" parent="1" source="1wH2KnDZV6dMyFnDG8o9-2" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1wH2KnDZV6dMyFnDG8o9-3" value="Business Logic Calls">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-9" edge="1" parent="1" source="1wH2KnDZV6dMyFnDG8o9-3" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.81;entryX=0.5;entryY=0;rounded=0;" target="1wH2KnDZV6dMyFnDG8o9-4" value="Store / Retrieve Data">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="783" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-10" edge="1" parent="1" source="1wH2KnDZV6dMyFnDG8o9-3" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="1wH2KnDZV6dMyFnDG8o9-5" value="Fetch PR Data">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1wH2KnDZV6dMyFnDG8o9-11" edge="1" parent="1" source="1wH2KnDZV6dMyFnDG8o9-3" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.83;entryX=0.5;entryY=0;rounded=0;" target="1wH2KnDZV6dMyFnDG8o9-6" value="Send Code for Analysis">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="633" y="783" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
