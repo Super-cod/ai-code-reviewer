@@ -1,109 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Code Reviewer | Premium PR Analysis</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>AI Code Reviewer</title>
+    <meta http-equiv="refresh" content="0; url=/login">
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">AI.CodeReviewer</div>
-            <nav id="nav-actions">
-                <!-- Logged in actions go here -->
-            </nav>
-        </header>
-
-        <!-- Auth View -->
-        <section id="auth-section" class="animate-fade">
-            <div class="card glass">
-                <h1>Level Up Your Code.</h1>
-                <p class="subtitle">Analyze GitHub Pull Requests instantly using the power of LLMs.</p>
-
-                <div class="input-group">
-                    <label>GitHub Personal Access Token</label>
-                    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
-                </div>
-
-                <div class="input-group">
-                    <label>Google API Key (Gemini)</label>
-                    <input type="password" id="gemini-key" placeholder="AIzaSyxxxxxxxxxxxx">
-                </div>
-
-                <button id="login-btn" class="btn btn-primary" style="width: 100%;">
-                    Connect & Start Reviewing
-                </button>
-            </div>
-        </section>
-
-        <!-- Dashboard View -->
-        <section id="dashboard-section" class="hidden animate-fade">
-            <div class="sidebar glass">
-                <div class="sidebar-header">
-                    <h3>Repositories</h3>
-                </div>
-                <div id="repo-list">
-                    <!-- Repos populated here -->
-                    <div class="loader-container" id="repo-loader">
-                        <span class="loader"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main-content glass">
-                <div id="empty-state">
-                    <h3>Select a repository to view Pull Requests</h3>
-                </div>
-
-                <div id="pr-list-view" class="hidden">
-                    <div class="review-header">
-                        <h2 id="current-repo-name">Repository Name</h2>
-                        <button class="btn btn-outline" id="back-to-repos">Change Repo</button>
-                    </div>
-                    <div id="pr-list-items">
-                        <!-- PRs populated here -->
-                    </div>
-                </div>
-
-                <div id="review-view" class="hidden">
-                    <div class="review-header">
-                        <div class="pr-info">
-                            <span class="badge" id="pr-number">#123</span>
-                            <h2 id="pr-title">PR Title</h2>
-                            <p class="list-subtitle">By <span id="pr-author">user</span></p>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-primary" id="start-review-btn">Trigger AI Review</button>
-                            <button class="btn btn-outline" id="back-to-prs">Back to List</button>
-                        </div>
-                    </div>
-
-                    <div id="review-result-container" class="hidden">
-                        <h3>AI Feedback</h3>
-                        <div class="review-content" id="review-content">
-                            <!-- AI feedback goes here -->
-                        </div>
-                        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-                            <button class="btn btn-outline" id="post-comment-btn">Post to GitHub</button>
-                        </div>
-                    </div>
-
-                    <div id="review-loader" class="hidden" style="text-align: center; margin-top: 4rem;">
-                        <span class="loader"></span>
-                        <p style="margin-top: 1rem;">AI is analyzing your code changes...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <script src="/static/app.js"></script>
+    <p>Redirecting to <a href="/login">login</a>...</p>
 </body>
-
 </html>

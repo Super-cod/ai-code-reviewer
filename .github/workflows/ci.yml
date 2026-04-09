@@ -1,0 +1,228 @@
+# ============================================================
+# AI Code Reviewer — GitHub Actions CI/CD Pipeline
+# ============================================================
+# Triggers: push or PR to main branch
+#
+# Pipeline stages:
+#   1. lint     — Code style check (flake8)
+#   2. test     — Run integration, regression, mutation tests
+#   3. build    — Docker image build & push to Docker Hub
+#   4. deploy   — (placeholder) Deploy to cloud provider
+# ============================================================
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  PYTHON_VERSION: '3.11'
+  DOCKER_IMAGE: ai-code-reviewer
+
+jobs:
+  # ============================================================
+  # Job 1: Lint
+  # ============================================================
+  lint:
+    name: 🔍 Lint (flake8)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install linting dependencies
+        run: pip install flake8
+
+      - name: Run flake8
+        run: |
+          flake8 backend/ \
+            --max-line-length=120 \
+            --ignore=E501,W503,E302,E303 \
+            --exclude=__pycache__,.git
+
+  # ============================================================
+  # Job 2: Test Suite
+  # ============================================================
+  test:
+    name: 🧪 Tests (pytest)
+    runs-on: ubuntu-latest
+    needs: lint
+
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand({ping:1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install pytest-asyncio
+
+      - name: Run Integration Tests
+        env:
+          GITHUB_TOKEN: fake_token_for_ci
+          GOOGLE_API_KEY: fake_key_for_ci
+          MONGO_URI: mongodb://localhost:27017
+          MONGO_DB_NAME: test_ai_code_reviewer
+          APP_ENV: test
+        run: |
+          cd backend
+          python -m pytest ../tests/test_integration.py -v \
+            --tb=short \
+            --junit-xml=../test-results/integration.xml
+
+      - name: Run Regression Tests
+        env:
+          GITHUB_TOKEN: fake_token_for_ci
+          GOOGLE_API_KEY: fake_key_for_ci
+          MONGO_URI: mongodb://localhost:27017
+          MONGO_DB_NAME: test_ai_code_reviewer
+          APP_ENV: test
+        run: |
+          cd backend
+          python -m pytest ../tests/test_regression.py -v \
+            --tb=short \
+            --junit-xml=../test-results/regression.xml
+
+      - name: Run Mutation Tests
+        env:
+          GITHUB_TOKEN: fake_token_for_ci
+          GOOGLE_API_KEY: fake_key_for_ci
+          MONGO_URI: mongodb://localhost:27017
+          MONGO_DB_NAME: test_ai_code_reviewer
+          APP_ENV: test
+        run: |
+          cd backend
+          python -m pytest ../tests/test_mutation.py -v \
+            --tb=short \
+            --junit-xml=../test-results/mutation.xml
+
+      - name: Run All Tests with Coverage
+        env:
+          GITHUB_TOKEN: fake_token_for_ci
+          GOOGLE_API_KEY: fake_key_for_ci
+          MONGO_URI: mongodb://localhost:27017
+          MONGO_DB_NAME: test_ai_code_reviewer
+          APP_ENV: test
+        run: |
+          cd backend
+          python -m pytest ../tests/ -v \
+            --tb=short \
+            --cov=. \
+            --cov-report=xml:../coverage.xml \
+            --cov-report=term-missing
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            test-results/
+            coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+
+  # ============================================================
+  # Job 3: Docker Build
+  # ============================================================
+  docker-build:
+    name: 🐳 Docker Build
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -f docker/Dockerfile \
+            -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} \
+            -t ${{ env.DOCKER_IMAGE }}:latest \
+            .
+
+      - name: Test Docker image health
+        run: |
+          docker run -d \
+            -p 8000:8000 \
+            -e GITHUB_TOKEN=fake \
+            -e GOOGLE_API_KEY=fake \
+            -e MONGO_URI=mongodb://localhost:27017 \
+            --name test_container \
+            ${{ env.DOCKER_IMAGE }}:latest
+          sleep 10
+          curl --fail http://localhost:8000/health || (docker logs test_container && exit 1)
+          docker stop test_container
+
+      - name: Login to Docker Hub
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push to Docker Hub
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          docker tag ${{ env.DOCKER_IMAGE }}:latest \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+
+  # ============================================================
+  # Job 4: Deploy (placeholder — adapt for your cloud provider)
+  # ============================================================
+  deploy:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: docker-build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    environment:
+      name: production
+      url: https://your-app-domain.com
+
+    steps:
+      - name: Deploy to server
+        run: |
+          echo "🚀 Deployment step — configure for your cloud provider."
+          echo "Options: AWS ECS, Railway, Render, DigitalOcean App Platform, etc."
+          # Example for SSH-based deployment:
+          # ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+          #   "cd /opt/ai-code-reviewer && docker-compose pull && docker-compose up -d"

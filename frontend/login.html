@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Reviewer - Login</title>
+    <meta name="description" content="Secure GitHub login for AI Code Reviewer platform.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="page-login">
+    <main class="login-shell">
+        <section class="login-panel">
+            <h1 class="login-title">Production-Grade PR Intelligence</h1>
+            <p class="login-sub">
+                Authenticate with GitHub, then use a multi-view analysis workspace with repository telemetry,
+                deep code indexing, structured findings, and publishing workflow.
+            </p>
+            <div class="feature-grid">
+                <article class="feature">
+                    <h4>OAuth Security</h4>
+                    <p>Signed session cookies, authenticated API calls, and protected dashboard routes.</p>
+                </article>
+                <article class="feature">
+                    <h4>Local Clone Pipeline</h4>
+                    <p>Selected PR branches are cloned and indexed for deep repository context.</p>
+                </article>
+                <article class="feature">
+                    <h4>Deep Analysis</h4>
+                    <p>PR diff review plus architecture, quality, performance, and security evaluation.</p>
+                </article>
+                <article class="feature">
+                    <h4>Review Operations</h4>
+                    <p>Post findings directly to GitHub PRs and track full history in dashboard pages.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="login-card">
+            <h2>Sign in with GitHub</h2>
+            <p>Use your GitHub account to load repositories and open pull requests.</p>
+            <button class="btn btn-primary" id="login-btn">Continue with GitHub</button>
+            <div id="login-error" class="alert hidden"></div>
+            <p class="muted">After login you will be redirected to the authenticated dashboard.</p>
+        </section>
+    </main>
+
+    <script src="/static/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Reviewer - Dashboard</title>
+    <meta name="description" content="Authenticated multi-page dashboard for deep GitHub PR analysis.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">AI</div>
+                <div>Code Reviewer</div>
+            </div>
+
+            <nav class="nav" id="dashboard-nav">
+                <button data-view="overview" class="active">Overview</button>
+                <button data-view="repositories">Repositories</button>
+                <button data-view="pullrequests">Pull Requests</button>
+                <button data-view="analysis">Analysis Studio</button>
+                <button data-view="report">Deep Report</button>
+                <button data-view="history">History</button>
+                <button data-view="docs">Docs & Architecture</button>
+                <button data-view="settings">Settings</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-secondary" id="refresh-all">Refresh Data</button>
+                <button class="btn btn-danger" id="logout-btn">Logout</button>
+            </div>
+        </aside>
+
+        <section class="main">
+            <header class="topbar">
+                <div>
+                    <div id="top-title"><strong>Overview</strong></div>
+                    <div class="muted" id="top-subtitle">Platform activity and analysis readiness</div>
+                </div>
+                <div style="display:flex; align-items:center; gap: 16px;">
+                    <button class="btn btn-secondary" id="open-chat-btn">💬 Chat with Codebase</button>
+                    <div class="user">
+                        <img id="user-avatar" src="" alt="avatar">
+                        <div>
+                            <div id="user-name"><strong>Loading...</strong></div>
+                            <div class="muted" id="user-login"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="view-overview" class="view active">
+                <div class="grid grid-4">
+                    <article class="card">
+                        <div class="muted">Repositories</div>
+                        <div class="kpi" id="kpi-repos">0</div>
+                    </article>
+                    <article class="card">
+                        <div class="muted">Open PRs (selected repo)</div>
+                        <div class="kpi" id="kpi-prs">0</div>
+                    </article>
+                    <article class="card">
+                        <div class="muted">Reviews Stored</div>
+                        <div class="kpi" id="kpi-reviews">0</div>
+                    </article>
+                    <article class="card">
+                        <div class="muted">System Health</div>
+                        <div><span class="tag ok" id="kpi-health">Checking...</span></div>
+                    </article>
+                </div>
+
+                <div class="grid grid-2" style="margin-top:12px;">
+                    <article class="card">
+                        <h3>Analysis Pipeline</h3>
+                        <p class="muted">Clone, index, review, and deep-report generation status.</p>
+                        <div style="margin-top:10px;" class="timeline" id="pipeline-timeline"></div>
+                    </article>
+                    <article class="card">
+                        <h3>Repository Mix</h3>
+                        <p class="muted">Quick distribution by language for loaded repositories.</p>
+                        <div id="language-bars"></div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="view-repositories" class="view">
+                <article class="card">
+                    <h3>Repository Catalog</h3>
+                    <p class="muted">Select a repository to drive PR and analysis pages.</p>
+                    <div style="margin:10px 0;">
+                        <select id="repo-select" class="select"></select>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="table" id="repo-table"></table>
+                    </div>
+                </article>
+            </section>
+
+            <section id="view-pullrequests" class="view">
+                <article class="card">
+                    <h3>Open Pull Requests</h3>
+                    <p class="muted">Current repository PRs with size and activity metadata.</p>
+                    <div style="margin:10px 0;">
+                        <select id="pr-select" class="select"></select>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="table" id="pr-table"></table>
+                    </div>
+                </article>
+            </section>
+
+            <section id="view-analysis" class="view">
+                <article class="card">
+                    <h3>Analysis Studio</h3>
+                    <p class="muted">Run full PR + deep repository analysis for selected repo and PR.</p>
+                    <div class="grid grid-2" style="margin-top:10px;">
+                        <div>
+                            <label class="muted">Selected Repository</label>
+                            <div id="analysis-repo" class="input">-</div>
+                        </div>
+                        <div>
+                            <label class="muted">Selected PR</label>
+                            <div id="analysis-pr" class="input">-</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:12px; display:flex; gap:8px;">
+                        <button class="btn btn-primary" id="run-review-btn">Run Deep Analysis</button>
+                        <button class="btn btn-secondary" id="copy-report-btn">Copy Full Report</button>
+                    </div>
+                    <div id="analysis-error" class="alert hidden" style="margin-top:10px;"></div>
+                </article>
+
+                <article class="card" style="margin-top:12px;">
+                    <h4>Pipeline Progress</h4>
+                    <div style="display:grid; gap:10px; margin-top:10px;">
+                        <div>
+                            <div class="muted">Repository Clone</div>
+                            <div class="progress"><span id="p-clone" style="width:0%"></span></div>
+                        </div>
+                        <div>
+                            <div class="muted">Code Indexing</div>
+                            <div class="progress"><span id="p-index" style="width:0%"></span></div>
+                        </div>
+                        <div>
+                            <div class="muted">AI Review Synthesis</div>
+                            <div class="progress"><span id="p-review" style="width:0%"></span></div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section id="view-report" class="view report-view">
+                <article class="card report-hero">
+                    <div class="report-hero-copy">
+                        <p class="eyebrow">Deep Report</p>
+                        <h3>Executive-grade PR review workspace</h3>
+                        <p class="muted">Review the AI findings, switch between report pages, and capture a polished summary before posting back to GitHub.</p>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;">
+                            <span class="tag" id="meta-repo">Repo: -</span>
+                            <span class="tag warn" id="meta-pr">PR: -</span>
+                            <span class="tag ok" id="meta-score">Overall: -</span>
+                            <span class="tag" id="meta-confidence">Confidence: -</span>
+                        </div>
+                    </div>
+                    <div class="report-scorecard">
+                        <div class="muted">Report readiness</div>
+                        <div class="report-score" id="report-page-count">0 sections ready</div>
+                        <div class="report-score-sub" id="report-file-count">0 files indexed</div>
+                        <div class="report-score-sub" id="report-signal">Run analysis to populate a connected report.</div>
+                    </div>
+                </article>
+
+                <div class="report-layout">
+                    <div class="report-main">
+                        <article class="card report-panel">
+                            <div class="report-section-heading">
+                                <div>
+                                    <h4>Severity Snapshot</h4>
+                                    <p class="muted">Issue distribution extracted from the latest review.</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-4 report-metrics" style="margin-bottom:0;">
+                                <div class="card metric-card">
+                                    <div class="muted">Critical</div>
+                                    <div class="kpi" id="metric-critical">0</div>
+                                </div>
+                                <div class="card metric-card">
+                                    <div class="muted">High</div>
+                                    <div class="kpi" id="metric-high">0</div>
+                                </div>
+                                <div class="card metric-card">
+                                    <div class="muted">Medium</div>
+                                    <div class="kpi" id="metric-medium">0</div>
+                                </div>
+                                <div class="card metric-card">
+                                    <div class="muted">Low</div>
+                                    <div class="kpi" id="metric-low">0</div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card report-panel">
+                            <div class="report-section-heading">
+                                <div>
+                                    <h4>Report Pages</h4>
+                                    <p class="muted">Switch between structured narrative pages generated from the analysis.</p>
+                                </div>
+                                <div id="report-nav" class="report-nav"></div>
+                            </div>
+                            <div class="report-box report-body-shell" id="report-body">Run analysis to view report pages.</div>
+                        </article>
+
+                        <article class="card report-panel">
+                            <h4 id="doc-title">Page Documentation</h4>
+                            <div class="grid grid-2 report-doc-grid">
+                                <div>
+                                    <div class="muted" style="margin-bottom:8px;">What this page covers</div>
+                                    <div class="timeline" id="page-doc">
+                                        <div class="timeline-item">Run analysis to generate connected documentation for this page.</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="muted" style="margin-bottom:8px;">Connected pages</div>
+                                    <div class="timeline" id="page-links">
+                                        <div class="timeline-item">Cross-links appear after analysis.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <aside class="report-rail">
+                        <article class="card report-panel">
+                            <h4>Top Findings</h4>
+                            <div id="top-findings" class="timeline"></div>
+                        </article>
+                        <article class="card report-panel">
+                            <h4>Executive Snapshot</h4>
+                            <div id="executive-snapshot" class="report-snapshot">Run analysis to populate executive summary.</div>
+                        </article>
+                        <article class="card report-panel">
+                            <h4>GitHub Comment</h4>
+                            <p class="muted">Post the PR-specific review summary directly on the pull request.</p>
+                            <textarea id="comment-box" class="textarea"></textarea>
+                            <div style="margin-top:10px;">
+                                <button class="btn btn-primary" id="post-comment-btn">Post to GitHub</button>
+                            </div>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <section id="view-history" class="view">
+                <article class="card">
+                    <h3>Review History</h3>
+                    <p class="muted">Stored analyses available for reopening and comparison.</p>
+                    <div class="table-wrap">
+                        <table class="table" id="history-table"></table>
+                    </div>
+                </article>
+            </section>
+
+            <section id="view-docs" class="view">
+                <article class="card">
+                    <h3>Frontend Architecture</h3>
+                    <p class="muted">Live architecture map of session flow, backend services, and data persistence.</p>
+                    <div class="grid grid-2" style="margin-top:10px;">
+                        <div class="mermaid-shell">
+                            <h4>System Flow</h4>
+                            <pre class="mermaid" id="mermaid-system-flow">flowchart LR
+    U[User Browser] --> L[Login Page]
+    L -->|OAuth| GH[(GitHub)]
+    GH --> C[Auth Callback]
+    C --> D[Dashboard]
+    D --> R[Select Repo + PR]
+    R --> A[Run Analysis]
+    A --> B[Backend FastAPI]
+    B --> G1[GitHubService]
+    B --> I1[Indexer]
+    B --> AI1[AIService]
+    G1 --> G[(GitHub API)]
+    I1 --> X[(Local Clone/Index)]
+    AI1 --> M[(Gemini)]
+    B --> DB[(SQLite / SQLAlchemy)]
+    B --> RP[Review Response]
+    RP --> DR[Deep Report UI]
+    DR --> PC[Post Comment]</pre>
+                        </div>
+                        <div class="mermaid-shell">
+                            <h4>Code Modules</h4>
+                            <pre class="mermaid" id="mermaid-module-map">flowchart TD
+    subgraph Frontend
+        FH[dashboard.html]
+        FJ[dashboard.js]
+        FS[style.css]
+    end
+    subgraph Backend
+        BM[main.py]
+        BA[auth.py]
+        BG[github_service.py]
+        BI[indexer.py]
+        BAS[ai_service.py]
+        BD[database.py]
+        BL[local_repo.py]
+    end
+    FH --> FJ
+    FJ --> BM
+    BM --> BA
+    BM --> BG
+    BM --> BI
+    BM --> BAS
+    BM --> BD
+    BM --> BL</pre>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card" style="margin-top:12px;">
+                    <h3>Page Documentation Catalog</h3>
+                    <p class="muted">Purpose, inputs, outputs, and actions for each dashboard page.</p>
+                    <div class="docs-catalog" id="page-docs-catalog"></div>
+                </article>
+
+                <article class="card" style="margin-top:12px;">
+                    <h3>API Integration Documentation</h3>
+                    <p class="muted">Frontend-to-backend endpoint mapping by dashboard workflow.</p>
+                    <div class="timeline" id="endpoint-docs"></div>
+                </article>
+            </section>
+
+            <section id="view-settings" class="view">
+                <article class="card">
+                    <h3>Runtime Settings</h3>
+                    <p class="muted">Session-level configuration and operational controls.</p>
+                    <div style="margin-top:10px; display:grid; gap:10px; max-width:600px;">
+                        <div>
+                            <label class="muted">Gemini API Key</label>
+                            <input id="gemini-key-input" type="password" class="input" placeholder="AIza...">
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn btn-secondary" id="save-key-btn">Save Key</button>
+                            <button class="btn btn-secondary" id="show-key-btn">Show/Hide</button>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </section>
+    </div>
+
+    <!-- Chat Slide-out Panel -->
+    <div id="chat-panel" class="chat-panel hidden">
+        <div class="chat-header">
+            <h3>💬 Chat with Codebase</h3>
+            <button id="close-chat-btn" class="icon-btn">✕</button>
+        </div>
+        <div id="chat-history" class="chat-history">
+            <div class="chat-msg ai">Welcome! Ask me anything about the current repository. Make sure to run an analysis first so the repo is cached.</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="input" placeholder="Where is the auth token validated?" />
+            <button id="send-chat-btn" class="btn btn-primary">Send</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>

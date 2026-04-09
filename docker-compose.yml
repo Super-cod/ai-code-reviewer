@@ -1,0 +1,33 @@
+# ============================================================
+# AI Code Reviewer — Docker Compose
+# ============================================================
+# Database: SQLAlchemy (SQLite by default in backend/.env)
+# Services: backend only + persistent data volume
+# ============================================================
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: ai_reviewer_backend
+    restart: unless-stopped
+    env_file:
+      - backend/.env
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=sqlite:///./data/ai_code_reviewer.db
+      - ANALYSIS_WORKDIR=./data/repos
+    ports:
+      - "8000:8000"
+    volumes:
+      - reviewer_data:/app/backend/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  reviewer_data:

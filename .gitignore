@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Environment files (NEVER commit real secrets)
+backend/.env
+.env
+
+# Test artifacts
+.pytest_cache/
+.coverage
+coverage.xml
+coverage_html/
+test-results/
+htmlcov/
+*.xml
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (if frontend dependencies are added later)
+node_modules/
+npm-debug.log*
+
+# Docker
+*.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# MongoDB data (for local dev)
+data/
+
+# Logs
+*.log
+logs/
