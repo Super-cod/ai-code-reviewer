@@ -1,6 +1,6 @@
 # 🤖 AI Code Reviewer
 
-[![CI/CD Pipeline](https://github.com/[your-username]/ai-code-reviewer/actions/workflows/ci.yml/badge.svg)](https://github.com/[your-username]/ai-code-reviewer/actions)
+[![CI/CD Pipeline](https://github.com/Super-cod/ai-code-reviewer/actions/workflows/ci.yml/badge.svg)](https://github.com/Super-cod/ai-code-reviewer/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green.svg)](https://fastapi.tiangolo.com/)
@@ -88,7 +88,7 @@ ai-code-reviewer/
 
 ```bash
 # 1. Clone
-git clone https://github.com/[your-username]/ai-code-reviewer.git
+git clone https://github.com/Super-cod/ai-code-reviewer.git
 cd ai-code-reviewer
 
 # 2. Configure environment
