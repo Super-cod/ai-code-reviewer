@@ -115,9 +115,8 @@ class TestAIServiceBoundaries:
     def test_no_api_key_disables_model(self):
         """AIService with no API key should have model=None."""
         from ai_service import AIService
-        with patch.dict(os.environ, {'GOOGLE_API_KEY': ''}):
-            svc = AIService(api_key=None)
-            # Don't set GOOGLE_API_KEY
+        with patch('ai_service.config') as mock_config:
+            mock_config.GOOGLE_API_KEY = ''
             svc_empty = AIService(api_key='')
             assert svc_empty.model is None
 
@@ -257,76 +256,6 @@ class TestAPIBoundaries:
                 'X-Google-Api-Key': 'test',
             }
         )
-        assert response.status_code == 200
-        data = response.json()
-        # Should gracefully return error status, not crash
-        assert data['status'] in ('error', 'success')
-
-
-# ===========================================================================
-# Boundary: Database Layer
-# ===========================================================================
-
-class TestDatabaseBoundaries:
-    """Test database module resilience when MongoDB is unavailable."""
-
-    def test_get_db_returns_none_on_connection_failure(self, monkeypatch):
-        """When MongoDB is unreachable, get_db should return None."""
-        import database as db_module
-        from pymongo.errors import ConnectionFailure
-
-        def failing_client(*args, **kwargs):
-            mock = MagicMock()
-            mock.admin.command.side_effect = ConnectionFailure('Unreachable')
-            return mock
-
-        # Reset cached connection
-        db_module._client = None
-        db_module._db = None
-        monkeypatch.setattr('pymongo.MongoClient', failing_client)
-
-        result = db_module.get_db()
-        assert result is None
-
-        # Cleanup
-        db_module._client = None
-        db_module._db = None
-
-    def test_save_review_returns_none_when_db_unavailable(self, monkeypatch):
-        """save_review should return None gracefully when DB is unavailable."""
-        import database as db_module
-        monkeypatch.setattr(db_module, 'get_db', lambda: None)
-
-        result = db_module.save_review(
-            owner='owner',
-            repo='repo',
-            pr_number=1,
-            pr_title='Test',
-            pr_author='user',
-            review_text='Some review',
-        )
-        assert result is None
-
-    def test_get_review_history_returns_empty_when_db_unavailable(self, monkeypatch):
-        """get_review_history should return [] when DB is None."""
-        import database as db_module
-        monkeypatch.setattr(db_module, 'get_db', lambda: None)
-
-        result = db_module.get_review_history()
-        assert result == []
-
-    def test_count_total_reviews_returns_zero_when_db_unavailable(self, monkeypatch):
-        """count_total_reviews should return 0 when DB is None."""
-        import database as db_module
-        monkeypatch.setattr(db_module, 'get_db', lambda: None)
-
-        result = db_module.count_total_reviews()
-        assert result == 0
-
-    def test_get_reviews_for_repo_returns_empty_when_db_unavailable(self, monkeypatch):
-        """get_reviews_for_repo should return [] when DB is None."""
-        import database as db_module
-        monkeypatch.setattr(db_module, 'get_db', lambda: None)
-
-        result = db_module.get_reviews_for_repo('owner', 'repo')
-        assert result == []
+        # An empty diff is rejected with a clear client error instead of crashing
+        assert response.status_code == 422
+        assert 'empty' in response.json()['detail'].lower()

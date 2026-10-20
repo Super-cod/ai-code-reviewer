@@ -22,7 +22,7 @@ from unittest.mock import MagicMock, AsyncMock, patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'backend')))
 
-from conftest import MOCK_REVIEW_TEXT, MOCK_DIFF, MOCK_REPOS, MOCK_PRS
+from tests.conftest import MOCK_REVIEW_TEXT, MOCK_DIFF, MOCK_REPOS, MOCK_PRS
 
 
 # ===========================================================================
@@ -124,11 +124,11 @@ class TestAIServiceOutputFormat:
             mock_instance.generate_content.return_value = mock_response
 
             svc = AIService(api_key='fake_key')
-            large_diff = 'x' * 20_000
+            large_diff = 'x' * 40_000
             result, _ = await svc.analyze_code(large_diff)
             # Verify generate_content was called with truncated content
             call_args = mock_instance.generate_content.call_args[0][0]
-            assert len(call_args) < 16_500  # truncated
+            assert len(call_args) < 30_500  # truncated to the 30,000-character limit
 
 
 # ===========================================================================
@@ -182,10 +182,15 @@ class TestGitHubServiceRegressionShapes:
             from importlib import reload
             import config as cfg_module
             reload(cfg_module)
-            from github_service import GitHubService
-            svc = GitHubService(token=None)
-            # Reload config without token — service should be non-functional but not crash
-            assert svc.gh is None or svc.gh is not None  # Not crashing is the assertion
+            try:
+                from github_service import GitHubService
+                svc = GitHubService(token=None)
+                # Reload config without token — service should be non-functional but not crash
+                assert svc.gh is None or svc.gh is not None  # Not crashing is the assertion
+            finally:
+                # Restore the module-level config so later tests see the test environment
+                os.environ['GITHUB_TOKEN'] = 'test_github_token'
+                reload(cfg_module)
 
     def test_github_service_get_user_repos_returns_empty_without_gh(self):
         """Without auth, get_user_repos should return []."""
@@ -237,16 +242,6 @@ class TestConfigLoad:
         cfg = Config()
         assert hasattr(cfg, 'GOOGLE_API_KEY')
 
-    def test_config_has_mongo_uri_attr(self):
-        from config import Config
-        cfg = Config()
-        assert hasattr(cfg, 'MONGO_URI')
-
-    def test_config_has_mongo_db_name_attr(self):
-        from config import Config
-        cfg = Config()
-        assert hasattr(cfg, 'MONGO_DB_NAME')
-
     def test_config_reads_test_github_token(self):
         from config import Config
         cfg = Config()
@@ -257,11 +252,6 @@ class TestConfigLoad:
         from config import Config
         cfg = Config()
         assert cfg.GOOGLE_API_KEY == 'test_google_api_key'
-
-    def test_mongo_uri_is_string(self):
-        from config import Config
-        cfg = Config()
-        assert isinstance(cfg.MONGO_URI, str)
 
     def test_app_env_is_test(self):
         from config import Config

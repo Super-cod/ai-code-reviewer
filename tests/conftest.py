@@ -19,10 +19,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 # ---------------------------------------------------------------------------
 # Force SQLite for tests (overrides Neon URL before any import reads config)
 # ---------------------------------------------------------------------------
-os.environ.setdefault('DATABASE_URL', 'sqlite:///./test_reviews.db')
-os.environ.setdefault('GITHUB_TOKEN', 'test_github_token')
-os.environ.setdefault('GOOGLE_API_KEY', 'test_google_api_key')
-os.environ.setdefault('APP_ENV', 'test')
+os.environ['DATABASE_URL'] = 'sqlite:///./test_reviews.db'
+os.environ['GITHUB_TOKEN'] = 'test_github_token'
+os.environ['GOOGLE_API_KEY'] = 'test_google_api_key'
+os.environ['APP_ENV'] = 'test'
 
 
 # ---------------------------------------------------------------------------

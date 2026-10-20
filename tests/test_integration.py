@@ -10,7 +10,7 @@ Run with: pytest tests/test_integration.py -v
 """
 
 import pytest
-from conftest import MOCK_REPOS, MOCK_PRS, MOCK_REVIEW_TEXT
+from tests.conftest import MOCK_REPOS, MOCK_PRS, MOCK_REVIEW_TEXT
 
 
 class TestHealth:
